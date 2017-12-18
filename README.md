@@ -310,6 +310,7 @@ Detailed solution sequences can be found inside <a href="run_part_1.log">run_par
 The optimal sequences attained by using a star search with planning graph level sum heuristic is as follows:
 
 **Problem 1** Optimal cost is **6**.
+
 | ID |        Action       |
 |:--:|:-------------------:|
 |  1 |  Load(C1, P1, SFO)  |
@@ -320,6 +321,7 @@ The optimal sequences attained by using a star search with planning graph level 
 |  6 | Unload(C1, P1, JFK) |
 
 **Problem 2** Optimal cost is **9**
+
 | ID |        Action       |
 |:--:|:-------------------:|
 |  1 |  Load(C2, P2, JFK)  |
@@ -333,6 +335,7 @@ The optimal sequences attained by using a star search with planning graph level 
 |  9 | Unload(C1, P1, JFK) |
 
 **Problem 3** Optimal cost is **12**
+
 | ID |        Action       |
 |:--:|:-------------------:|
 |  1 |  Load(C2, P2, JFK)  |
