@@ -1,44 +1,20 @@
-
-# Implement a Planning Search
+# Planning Search for Air Cargo Transport System
 
 ## Synopsis
 
-This project includes skeletons for the classes and functions needed to solve deterministic logistics planning problems for an Air Cargo transport system using a planning search agent. 
-With progression search algorithms like those in the navigation problem from lecture, optimal plans for each 
-problem will be computed.  Unlike the navigation problem, there is no simple distance heuristic to aid the agent. 
-Instead, you will implement domain-independent heuristics.
+In this project, a planning search agent is developed to solve deterministic logistics planning problems for an Air Cargo transport system.
+
+However, unlike the navigation problem for Pacman, there is no simple distance heuristic to aid the agent.
+
+Here domain-independent heuristics like ignoring preconditions heuristic and planning graph heuristic will be implemented and compared.
 
 ![Progression air cargo search](images/Progression.PNG)
 
-- Part 1 - Planning problems:
-	- READ: applicable portions of the Russel/Norvig AIMA text
-	- GIVEN: problems defined in classical PDDL (Planning Domain Definition Language)
-	- TODO: Implement the Python methods and functions as marked in `my_air_cargo_problems.py`
-	- TODO: Experiment and document metrics
-- Part 2 - Domain-independent heuristics:
-	- READ: applicable portions of the Russel/Norvig AIMA text
-	- TODO: Implement relaxed problem heuristic in `my_air_cargo_problems.py`
-	- TODO: Implement Planning Graph and automatic heuristic in `my_planning_graph.py`
-	- TODO: Experiment and document metrics
-- Part 3 - Written Analysis
+## Problems Overview
 
-## Environment requirements
-- Python 3.4 or higher
-- Starter code includes a copy of [companion code](https://github.com/aimacode) from the Stuart Russel/Norvig AIMA text.  
+Here all the three problems are in the Air Cargo domain.  They have the same action schema defined, but different initial states and goals.
 
-
-## Project Details
-### Part 1 - Planning problems
-#### READ: Stuart Russel and Peter Norvig text:
-
-"Artificial Intelligence: A Modern Approach" 3rd edition chapter 10 *or* 2nd edition Chapter 11 on Planning, available [on the AIMA book site](http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf) sections: 
-
-- *The Planning Problem*
-- *Planning with State-space Search*
-
-#### GIVEN: classical PDDL problems
-
-All problems are in the Air Cargo domain.  They have the same action schema defined, but different initial states and goals.
+### Action Schema
 
 - Air Cargo Action Schema:
 ```
@@ -53,19 +29,21 @@ Action(Fly(p, from, to),
 	EFFECT: ¬ At(p, from) ∧ At(p, to))
 ```
 
+### Problem Definitions
+
 - Problem 1 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK) 
-	∧ At(P1, SFO) ∧ At(P2, JFK) 
-	∧ Cargo(C1) ∧ Cargo(C2) 
+Init(At(C1, SFO) ∧ At(C2, JFK)
+	∧ At(P1, SFO) ∧ At(P2, JFK)
+	∧ Cargo(C1) ∧ Cargo(C2)
 	∧ Plane(P1) ∧ Plane(P2)
 	∧ Airport(JFK) ∧ Airport(SFO))
 Goal(At(C1, JFK) ∧ At(C2, SFO))
 ```
 - Problem 2 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) 
-	∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) 
+Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL)
+	∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL)
 	∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3)
 	∧ Plane(P1) ∧ Plane(P2) ∧ Plane(P3)
 	∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL))
@@ -73,105 +51,364 @@ Goal(At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO))
 ```
 - Problem 3 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
-	∧ At(P1, SFO) ∧ At(P2, JFK) 
+Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD)
+	∧ At(P1, SFO) ∧ At(P2, JFK)
 	∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
 	∧ Plane(P1) ∧ Plane(P2)
 	∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
 Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
 ```
 
-#### TODO: Implement methods and functions in `my_air_cargo_problems.py`
-- `AirCargoProblem.get_actions` method including `load_actions` and `unload_actions` sub-functions
-- `AirCargoProblem.actions` method
-- `AirCargoProblem.result` method
-- `air_cargo_p2` function
-- `air_cargo_p3` function
+## Problem Representation
 
-#### TODO: Experiment and document metrics for non-heuristic planning solution searches
-* Run uninformed planning searches for `air_cargo_p1`, `air_cargo_p2`, and `air_cargo_p3`; provide metrics on number of node expansions required, number of goal tests, time elapsed, and optimality of solution for each search algorithm. Include the result of at least three of these searches, including breadth-first and depth-first, in your write-up (`breadth_first_search` and `depth_first_graph_search`). 
-* If depth-first takes longer than 10 minutes for Problem 3 on your system, stop the search and provide this information in your report.
-* Use the `run_search` script for your data collection: from the command line type `python run_search.py -h` to learn more.
+### Representation in Python
 
->#### Why are we setting the problems up this way?  
->Progression planning problems can be 
-solved with graph searches such as breadth-first, depth-first, and A*, where the 
-nodes of the graph are "states" and edges are "actions".  A "state" is the logical 
-conjunction of all boolean ground "fluents", or state variables, that are possible 
-for the problem using Propositional Logic. For example, we might have a problem to 
-plan the transport of one cargo, C1, on a
-single available plane, P1, from one airport to another, SFO to JFK.
-![state space](images/statespace.png)
-In this simple example, there are five fluents, or state variables, which means our state 
-space could be as large as ![2to5](images/twotofive.png). Note the following:
->- While the initial state defines every fluent explicitly, in this case mapped to **TTFFF**, the goal may 
-be a set of states.  Any state that is `True` for the fluent `At(C1,JFK)` meets the goal.
->- Even though PDDL uses variable to describe actions as "action schema", these problems
-are not solved with First Order Logic.  They are solved with Propositional logic and must
-therefore be defined with concrete (non-variable) actions
-and literal (non-variable) fluents in state descriptions.
->- The fluents here are mapped to a simple string representing the boolean value of each fluent
-in the system, e.g. **TTFFTT...TTF**.  This will be the state representation in 
-the `AirCargoProblem` class and is compatible with the `Node` and `Problem` 
-classes, and the search methods in the AIMA library.  
+All the three problems are represented in Python script <a href="my_air_cargo_problems.py">my_air_cargo_problems.py</a> as follows:
 
+**Problem 1**
+```python
+def air_cargo_p1():
+    """ Implementation of air cargo transport problem 1
 
-### Part 2 - Domain-independent heuristics
-#### READ: Stuart Russel and Peter Norvig text
-"Artificial Intelligence: A Modern Approach" 3rd edition chapter 10 *or* 2nd edition Chapter 11 on Planning, available [on the AIMA book site](http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf) section: 
+        Init(
+            At(C1, SFO) ∧ At(C2, JFK) ∧
+            At(P1, SFO) ∧ At(P2, JFK) ∧
+            Cargo(C1) ∧ Cargo(C2) ∧
+            Plane(P1) ∧ Plane(P2) ∧
+            Airport(JFK) ∧ Airport(SFO)
+        )
 
-- *Planning Graph*
+        Goal(
+            At(C1, JFK) ∧ At(C2, SFO)
+        )
+    """
+    cargos = ['C1', 'C2']
+    planes = ['P1', 'P2']
+    airports = ['JFK', 'SFO']
 
-#### TODO: Implement heuristic method in `my_air_cargo_problems.py`
-- `AirCargoProblem.h_ignore_preconditions` method
+    pos = [
+        expr('At(C1, SFO)'),
+        expr('At(C2, JFK)'),
+        expr('At(P1, SFO)'),
+        expr('At(P2, JFK)')
+    ]
+    neg = [
+        expr('At(C1, JFK)'),
+        expr('In(C1, P1)'),
+        expr('In(C1, P2)'),
 
-#### TODO: Implement a Planning Graph with automatic heuristics in `my_planning_graph.py`
-- `PlanningGraph.add_action_level` method
-- `PlanningGraph.add_literal_level` method
-- `PlanningGraph.inconsistent_effects_mutex` method
-- `PlanningGraph.interference_mutex` method
-- `PlanningGraph.competing_needs_mutex` method
-- `PlanningGraph.negation_mutex` method
-- `PlanningGraph.inconsistent_support_mutex` method
-- `PlanningGraph.h_levelsum` method
+        expr('At(C2, SFO)'),
+        expr('In(C2, P1)'),
+        expr('In(C2, P2)'),
 
+        expr('At(P1, JFK)'),
 
-#### TODO: Experiment and document: metrics of A* searches with these heuristics
-* Run A* planning searches using the heuristics you have implemented on `air_cargo_p1`, `air_cargo_p2` and `air_cargo_p3`. Provide metrics on number of node expansions required, number of goal tests, time elapsed, and optimality of solution for each search algorithm and include the results in your report. 
-* Use the `run_search` script for this purpose: from the command line type `python run_search.py -h` to learn more.
+        expr('At(P2, SFO)')
+    ]
 
->#### Why a Planning Graph?
->The planning graph is somewhat complex, but is useful in planning because it is a polynomial-size approximation of the exponential tree that represents all possible paths. The planning graph can be used to provide automated admissible heuristics for any domain.  It can also be used as the first step in implementing GRAPHPLAN, a direct planning algorithm that you may wish to learn more about on your own (but we will not address it here).
+    init = FluentState(pos, neg)
 
->*Planning Graph example from the AIMA book*
->![Planning Graph](images/eatcake-graphplan2.png)
+    goal = [
+        expr('At(C1, JFK)'),
+        expr('At(C2, SFO)')
+    ]
 
-### Part 3: Written Analysis
-#### TODO: Include the following in your written analysis.  
-- Provide an optimal plan for Problems 1, 2, and 3.
-- Compare and contrast non-heuristic search result metrics (optimality, time elapsed, number of node expansions) for Problems 1,2, and 3. Include breadth-first, depth-first, and at least one other uninformed non-heuristic search in your comparison; Your third choice of non-heuristic search may be skipped for Problem 3 if it takes longer than 10 minutes to run, but a note in this case should be included.
-- Compare and contrast heuristic search result metrics using A* with the "ignore preconditions" and "level-sum" heuristics for Problems 1, 2, and 3.
-- What was the best heuristic used in these problems?  Was it better than non-heuristic search planning methods for all problems?  Why or why not?
-- Provide tables or other visual aids as needed for clarity in your discussion.
+    return AirCargoProblem(
+        cargos,
+        planes,
+        airports,
+        init,
+        goal
+    )
+```
 
-## Examples and Testing:
-- The planning problem for the "Have Cake and Eat it Too" problem in the book has been
-implemented in the `example_have_cake` module as an example.
-- The `tests` directory includes `unittest` test cases to evaluate your implementations. All tests should pass before you submit your project for review. From the AIND-Planning directory command line:
-    - `python -m unittest tests.test_my_air_cargo_problems`
-    - `python -m unittest tests.test_my_planning_graph`
-    - You can run all the test cases with additional context by running `python -m unittest -v`
-- The `run_search` script is provided for gathering metrics for various search methods on any or all of the problems and should be used for this purpose.
+**Problem 2**
+```python
+def air_cargo_p2():
+    """ Implementation of air cargo transport problem 1
 
-## Submission
-Before submitting your solution to a reviewer, you are required to submit your project to Udacity's Project Assistant, which will provide some initial feedback.  
+        Init(
+            At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧
+            At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) ∧
+            Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧
+            Plane(P1) ∧ Plane(P2) ∧ Plane(P3) ∧
+            Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL)
+        )
+        Goal(
+            At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO)
+        )
+    """
+    cargos = ['C1', 'C2', 'C3']
+    planes = ['P1', 'P2', 'P3']
+    airports = ['SFO', 'JFK', 'ATL']
 
-The setup is simple.  If you have not installed the client tool already, then you may do so with the command `pip install udacity-pa`.  
+    pos = [
+        expr('At(C1, SFO)'),
+        expr('At(C2, JFK)'),
+        expr('At(C3, ATL)'),
 
-To submit your code to the project assistant, run `udacity submit` from within the top-level directory of this project.  You will be prompted for a username and password.  If you login using google or facebook, visit [this link](https://project-assistant.udacity.com/auth_tokens/jwt_login) for alternate login instructions.
+        expr('At(P1, SFO)'),
+        expr('At(P2, JFK)'),
+        expr('At(P3, ATL)')
+    ]
+    neg = [
+        expr('At(C1, JFK)'),
+        expr('At(C1, ATL)'),
 
-This process will create a zipfile in your top-level directory named cargo_planning-<id>.zip.  This is the file that you should submit to the Udacity reviews system.
+        expr('In(C1, P1)'),
+        expr('In(C1, P2)'),
+        expr('In(C1, P3)'),
 
-## Improving Execution Time
+        expr('At(C2, SFO)'),
+        expr('At(C2, ATL)'),
 
-The exercises in this project can take a *long* time to run (from several seconds to a several hours) depending on the heuristics and search algorithms you choose, as well as the efficiency of your own code.  (You may want to stop and profile your code if runtimes stretch past a few minutes.) One option to improve execution time is to try installing and using [pypy3](http://pypy.org/download.html) -- a python JIT, which can accelerate execution time substantially.  Using pypy is *not* required (and thus not officially supported) -- an efficient solution to this project runs in very reasonable time on modest hardware -- but working with pypy may allow students to explore more sophisticated problems than the examples included in the project.
+        expr('In(C2, P1)'),
+        expr('In(C2, P2)'),
+        expr('In(C2, P3)'),
+
+        expr('At(C3, SFO)'),
+        expr('At(C3, JFK)'),
+
+        expr('In(C3, P1)'),
+        expr('In(C3, P2)'),
+        expr('In(C3, P3)'),
+
+        expr('At(P1, JFK)'),
+        expr('At(P1, ATL)'),
+
+        expr('At(P2, SFO)'),
+        expr('At(P2, ATL)'),
+
+        expr('At(P2, JFK)'),
+        expr('At(P2, ATL)')
+    ]
+
+    init = FluentState(pos, neg)
+
+    goal = [
+        expr('At(C1, JFK)'),
+        expr('At(C2, SFO)'),
+        expr('At(C3, SFO)'),
+    ]
+
+    return AirCargoProblem(
+        cargos,
+        planes,
+        airports,
+        init,
+        goal
+    )
+```
+
+**Problem 3**
+```python
+def air_cargo_p3():
+    """ Implementation of air cargo transport problem 1
+
+        Init(
+            At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) ∧
+            At(P1, SFO) ∧ At(P2, JFK) ∧
+            Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4) ∧
+            Plane(P1) ∧ Plane(P2) ∧
+            Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD)
+        )
+        Goal(
+            At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, JFK) ∧ At(C4, SFO)
+        )
+    """
+    cargos = ['C1', 'C2', 'C3', 'C4']
+    planes = ['P1', 'P2']
+    airports = ['SFO', 'JFK', 'ATL', 'ORD']
+
+    pos = [
+        expr('At(C1, SFO)'),
+        expr('At(C2, JFK)'),
+        expr('At(C3, ATL)'),
+        expr('At(C4, ORD)'),
+
+        expr('At(P1, SFO)'),
+        expr('At(P2, JFK)'),
+    ]
+    neg = [
+        expr('At(C1, JFK)'),
+        expr('At(C1, ATL)'),
+        expr('At(C1, ORD)'),
+
+        expr('In(C1, P1)'),
+        expr('In(C1, P2)'),
+
+        expr('At(C2, SFO)'),
+        expr('At(C2, ATL)'),
+        expr('At(C2, ORD)'),
+
+        expr('In(C2, P1)'),
+        expr('In(C2, P2)'),
+
+        expr('At(C3, SFO)'),
+        expr('At(C3, JFK)'),
+        expr('At(C3, ORD)'),
+
+        expr('In(C3, P1)'),
+        expr('In(C3, P2)'),
+
+        expr('At(C4, SFO)'),
+        expr('At(C4, JFK)'),
+        expr('At(C4, ATL)'),
+
+        expr('In(C4, P1)'),
+        expr('In(C4, P2)'),
+
+        expr('At(P1, JFK)'),
+        expr('At(P1, ATL)'),
+        expr('At(P1, ORD)'),
+
+        expr('At(P2, SFO)'),
+        expr('At(P2, ATL)'),
+        expr('At(P2, ORD)')
+    ]
+
+    init = FluentState(pos, neg)
+
+    goal = [
+        expr('At(C1, JFK)'),
+        expr('At(C2, SFO)'),
+        expr('At(C3, JFK)'),
+        expr('At(C4, SFO)')
+    ]
+
+    return AirCargoProblem(
+        cargos,
+        planes,
+        airports,
+        init,
+        goal
+    )
+```
+
+### Optimal Sequence for Each Problem
+
+Detailed solution sequences can be found inside <a href="run_part_1.log">run_part_1.log</a> and <a href="run_part_2.log">run_part_2.log</a>.
+
+The optimal sequences attained by using a star search with planning graph level sum heuristic is as follows:
+
+**Problem 1** Optimal cost is **6**.
+| ID |        Action       |
+|:--:|:-------------------:|
+|  1 |  Load(C1, P1, SFO)  |
+|  2 |  Fly(P1, SFO, JFK)  |
+|  3 |  Load(C2, P2, JFK)  |
+|  4 |  Fly(P2, JFK, SFO)  |
+|  5 | Unload(C2, P2, SFO) |
+|  6 | Unload(C1, P1, JFK) |
+
+**Problem 2** Optimal cost is **9**
+| ID |        Action       |
+|:--:|:-------------------:|
+|  1 |  Load(C2, P2, JFK)  |
+|  2 |  Fly(P2, JFK, ATL)  |
+|  3 |  Load(C3, P2, ATL)  |
+|  4 |  Fly(P2, ATL, SFO)  |
+|  5 |  Load(C1, P1, SFO)  |
+|  6 |  Fly(P1, SFO, JFK)  |
+|  7 | Unload(C3, P2, SFO) |
+|  8 | Unload(C2, P2, SFO) |
+|  9 | Unload(C1, P1, JFK) |
+
+**Problem 3** Optimal cost is **12**
+| ID |        Action       |
+|:--:|:-------------------:|
+|  1 |  Load(C2, P2, JFK)  |
+|  2 |  Fly(P2, JFK, ORD)  |
+|  3 |  Load(C4, P2, ORD)  |
+|  4 |  Fly(P2, ORD, SFO)  |
+|  5 |  Load(C1, P1, SFO)  |
+|  6 |  Fly(P1, SFO, ATL)  |
+|  7 |  Load(C3, P1, ATL)  |
+|  8 |  Fly(P1, ATL, JFK)  |
+|  9 | Unload(C4, P2, SFO) |
+| 10 | Unload(C3, P1, JFK) |
+| 11 | Unload(C2, P2, SFO) |
+| 12 | Unload(C1, P1, JFK) |
+
+## Automated Heuristics
+
+### Ignore-Preconditions Heuristic
+
+Ignore-preconditions heuristic is implemented in <a href="my_air_cargo_problems.py">my_air_cargo_problems.py</a> as follows:
+```python
+@lru_cache(maxsize=8192)
+def h_ignore_preconditions(self, node: Node):
+		"""This heuristic estimates the minimum number of actions that must be
+		carried out from the current state in order to satisfy all of the goal
+		conditions by ignoring the preconditions required for an action to be
+		executed.
+		"""
+		# return the number of unsatisfied goals as heuristic cost
+		count = 0
+
+		kb = PropKB()
+		kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+		for clause in self.goal:
+				if clause not in kb.clauses:
+						count += 1
+
+		return count
+```
+
+### Planning Graph Level-Sum Heuristic
+
+Level-sum heuristic from planning graph is implemented in <a href="my_planning_graph.py">my_planning_graph.py</a>
+```python
+def h_levelsum(self):
+		"""The sum of the level costs of the individual goals (admissible if goals independent)
+
+		:return: int
+		"""
+		level_sum = 0
+
+		# for each goal in the problem, determine the level cost, then add them together
+		for goal in self.problem.goal:
+				# identify the shallowest level containing current goal state:
+				for level, state_level in enumerate(self.s_levels):
+						# extract state fingerprints:
+						states = set(state.symbol for state in state_level if state.is_pos)
+						if goal in states:
+								level_sum += level
+								break
+
+		return level_sum
+```
+
+## Performance Comparison
+
+### Uninformed Algorithms
+
+The following three uninformed algorithms are evaluated and their corresponding KPIs are as follows:
+
+| Problem |           Name           | Is Optimal | Time Elapsed | Node Expansions | Goal Tests | New Nodes |
+|:-------:|:------------------------:|:----------:|:------------:|:---------------:|:----------:|:---------:|
+|    1    |   Breadth First Search   |    True    |    0.0284    |        43       |     56     |    180    |
+|    2    |   Breadth First Search   |    True    |    3.8321    |       1855      |    2582    |   14801   |
+|    3    |   Breadth First Search   |    True    |    37.3692   |      14120      |    17673   |   124926  |
+|    1    | Depth First Graph Search |    False   |    0.0124    |        21       |     22     |     84    |
+|    2    | Depth First Graph Search |    False   |    0.3721    |       184       |     185    |    1143   |
+|    3    | Depth First Graph Search |    False   |     1.081    |       292       |     293    |    2388   |
+|    1    |    Uniform Cost Search   |    True    |    0.03170   |        55       |     57     |    224    |
+|    2    |    Uniform Cost Search   |    True    |    5.4067    |       2724      |    2726    |   21377   |
+|    3    |    Uniform Cost Search   |    True    |    45.4621   |      18223      |    18225   |   159618  |
+
+### Algorithms using Automated Heuristics
+
+The following three automated heuristics for a-star search are evaluated and their corresponding KPIs are as follows
+
+| Problem |              Name              | Is Optimal | Time Elapsed | Node Expansions | Goal Tests | New Nodes |
+|:-------:|:------------------------------:|:----------:|:------------:|:---------------:|:----------:|:---------:|
+|    1    |           A* with h_1          |    True    |    0.0330    |        55       |     57     |    224    |
+|    2    |           A* with h_1          |    True    |    5.9361    |       2724      |    2726    |   21377   |
+|    3    |           A* with h_1          |    True    |    49.8126   |      18223      |    18225   |   159618  |
+|    1    | A* with h_ignore_preconditions |    True    |    0.0325    |        41       |     43     |    170    |
+|    2    | A* with h_ignore_preconditions |    True    |    2.2290    |       876       |     878    |    7199   |
+|    3    | A* with h_ignore_preconditions |    True    |    15.6028   |       5040      |    5042    |   44944   |
+|    1    |      A* with h_pg_levelsum     |    True    |    0.5447    |        11       |     13     |     50    |
+|    2    |      A* with h_pg_levelsum     |    True    |    57.2826   |       238       |     240    |    1911   |
+|    3    |      A* with h_pg_levelsum     |    True    |   241.8140   |       325       |     327    |    3002   |
