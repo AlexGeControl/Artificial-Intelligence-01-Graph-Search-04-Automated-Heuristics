@@ -559,7 +559,9 @@ class PlanningGraph():
         for goal in self.problem.goal:
             # identify the shallowest level containing current goal state:
             for level, state_level in enumerate(self.s_levels):
-                if any((goal == state.symbol and state.is_pos) for state in state_level):
+                # extract state fingerprints:
+                states = set(state.symbol for state in state_level if state.is_pos)
+                if goal in states:
                     level_sum += level
                     break
 

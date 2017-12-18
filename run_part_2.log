@@ -4,7 +4,7 @@ Solving Air Cargo Problem 1 using astar_search with h_1...
 Expansions   Goal Tests   New Nodes
     55          57         224    
 
-Plan length: 6  Time elapsed in seconds: 0.03506915499929164
+Plan length: 6  Time elapsed in seconds: 0.03299163699921337
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
 Fly(P1, SFO, JFK)
@@ -19,7 +19,7 @@ Solving Air Cargo Problem 1 using astar_search with h_ignore_preconditions...
 Expansions   Goal Tests   New Nodes
     41          43         170    
 
-Plan length: 6  Time elapsed in seconds: 0.03222353499950259
+Plan length: 6  Time elapsed in seconds: 0.032514672999241157
 Load(C2, P2, JFK)
 Fly(P2, JFK, SFO)
 Unload(C2, P2, SFO)
@@ -34,7 +34,7 @@ Solving Air Cargo Problem 1 using astar_search with h_pg_levelsum...
 Expansions   Goal Tests   New Nodes
     11          13          50    
 
-Plan length: 6  Time elapsed in seconds: 0.5204333710007631
+Plan length: 6  Time elapsed in seconds: 0.5446788930003095
 Load(C1, P1, SFO)
 Fly(P1, SFO, JFK)
 Load(C2, P2, JFK)
@@ -49,7 +49,7 @@ Solving Air Cargo Problem 2 using astar_search with h_1...
 Expansions   Goal Tests   New Nodes
    2724        2726       21377   
 
-Plan length: 9  Time elapsed in seconds: 5.991757026000414
+Plan length: 9  Time elapsed in seconds: 5.936134458001106
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
 Fly(P2, JFK, ATL)
@@ -67,7 +67,7 @@ Solving Air Cargo Problem 2 using astar_search with h_ignore_preconditions...
 Expansions   Goal Tests   New Nodes
    876         878         7199   
 
-Plan length: 9  Time elapsed in seconds: 2.1597786139991513
+Plan length: 9  Time elapsed in seconds: 2.2289619559996936
 Load(C2, P2, JFK)
 Fly(P2, JFK, ATL)
 Load(C3, P2, ATL)
@@ -85,7 +85,7 @@ Solving Air Cargo Problem 2 using astar_search with h_pg_levelsum...
 Expansions   Goal Tests   New Nodes
    238         240         1911   
 
-Plan length: 9  Time elapsed in seconds: 58.882616707000125
+Plan length: 9  Time elapsed in seconds: 57.28261181400012
 Load(C2, P2, JFK)
 Fly(P2, JFK, ATL)
 Load(C3, P2, ATL)
@@ -103,7 +103,7 @@ Solving Air Cargo Problem 3 using astar_search with h_1...
 Expansions   Goal Tests   New Nodes
   18223       18225       159618  
 
-Plan length: 12  Time elapsed in seconds: 46.46444788899862
+Plan length: 12  Time elapsed in seconds: 49.81260813600056
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
 Fly(P1, SFO, ATL)
@@ -124,7 +124,7 @@ Solving Air Cargo Problem 3 using astar_search with h_ignore_preconditions...
 Expansions   Goal Tests   New Nodes
    5040        5042       44944   
 
-Plan length: 12  Time elapsed in seconds: 15.076643522999802
+Plan length: 12  Time elapsed in seconds: 15.602849180999328
 Load(C2, P2, JFK)
 Fly(P2, JFK, ORD)
 Load(C4, P2, ORD)
@@ -145,7 +145,7 @@ Solving Air Cargo Problem 3 using astar_search with h_pg_levelsum...
 Expansions   Goal Tests   New Nodes
    325         327         3002   
 
-Plan length: 12  Time elapsed in seconds: 241.6951786770005
+Plan length: 12  Time elapsed in seconds: 241.81400961599866
 Load(C2, P2, JFK)
 Fly(P2, JFK, ORD)
 Load(C4, P2, ORD)
