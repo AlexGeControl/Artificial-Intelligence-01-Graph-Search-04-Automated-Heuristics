@@ -259,6 +259,7 @@ class AirCargoProblem(Problem):
         # requires implemented PlanningGraph class
         pg = PlanningGraph(self, node.state)
         pg_levelsum = pg.h_levelsum()
+
         return pg_levelsum
 
     @lru_cache(maxsize=8192)
@@ -268,8 +269,15 @@ class AirCargoProblem(Problem):
         conditions by ignoring the preconditions required for an action to be
         executed.
         """
-        # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
+        # return the number of unsatisfied goals as heuristic cost
         count = 0
+
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        for clause in self.goal:
+            if clause not in kb.clauses:
+                count += 1
+
         return count
 
 
