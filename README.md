@@ -18,45 +18,63 @@ Here all the three problems are in the Air Cargo domain.  They have the same act
 
 - Air Cargo Action Schema:
 ```
-Action(Load(c, p, a),
-	PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
-	EFFECT: ¬ At(c, a) ∧ In(c, p))
-Action(Unload(c, p, a),
-	PRECOND: In(c, p) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
-	EFFECT: At(c, a) ∧ ¬ In(c, p))
-Action(Fly(p, from, to),
-	PRECOND: At(p, from) ∧ Plane(p) ∧ Airport(from) ∧ Airport(to)
-	EFFECT: ¬ At(p, from) ∧ At(p, to))
+Action(
+    Load(c, p, a),
+    PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+    EFFECT: ¬ At(c, a) ∧ In(c, p)
+)
+Action(
+    Unload(c, p, a),
+    PRECOND: In(c, p) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+    EFFECT: At(c, a) ∧ ¬ In(c, p)
+)
+Action(
+    Fly(p, from, to),
+    PRECOND: At(p, from) ∧ Plane(p) ∧ Airport(from) ∧ Airport(to)
+    EFFECT: ¬ At(p, from) ∧ At(p, to)
+)
 ```
 
 ### Problem Definitions
 
 - Problem 1 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK)
-	∧ At(P1, SFO) ∧ At(P2, JFK)
-	∧ Cargo(C1) ∧ Cargo(C2)
-	∧ Plane(P1) ∧ Plane(P2)
-	∧ Airport(JFK) ∧ Airport(SFO))
-Goal(At(C1, JFK) ∧ At(C2, SFO))
+Init(
+    At(C1, SFO) ∧ At(C2, JFK) ∧ 
+    At(P1, SFO) ∧ At(P2, JFK) ∧ 
+    Cargo(C1) ∧ Cargo(C2) ∧ 
+    Plane(P1) ∧ Plane(P2) ∧ 
+    Airport(JFK) ∧ Airport(SFO)
+)
+Goal(
+    At(C1, JFK) ∧ At(C2, SFO)
+)
 ```
 - Problem 2 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL)
-	∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL)
-	∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3)
-	∧ Plane(P1) ∧ Plane(P2) ∧ Plane(P3)
-	∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL))
-Goal(At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO))
+Init(
+    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ 
+    At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) ∧ 
+    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ 
+    Plane(P1) ∧ Plane(P2) ∧ Plane(P3) ∧ 
+    Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL)
+)
+Goal(
+    At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO)
+)
 ```
 - Problem 3 initial state and goal:
 ```
-Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD)
-	∧ At(P1, SFO) ∧ At(P2, JFK)
-	∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
-	∧ Plane(P1) ∧ Plane(P2)
-	∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
-Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
+Init(
+    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) ∧ 
+    At(P1, SFO) ∧ At(P2, JFK) ∧ 
+    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4) ∧ 
+    Plane(P1) ∧ Plane(P2) ∧ 
+    Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD)
+)
+Goal(
+    At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO)
+)
 ```
 
 ## Problem Representation
@@ -338,21 +356,21 @@ Ignore-preconditions heuristic is implemented in <a href="my_air_cargo_problems.
 ```python
 @lru_cache(maxsize=8192)
 def h_ignore_preconditions(self, node: Node):
-		"""This heuristic estimates the minimum number of actions that must be
-		carried out from the current state in order to satisfy all of the goal
-		conditions by ignoring the preconditions required for an action to be
-		executed.
-		"""
-		# return the number of unsatisfied goals as heuristic cost
-		count = 0
+    """This heuristic estimates the minimum number of actions that must be
+       carried out from the current state in order to satisfy all of the goal
+       conditions by ignoring the preconditions required for an action to be
+       executed.
+    """
+    # return the number of unsatisfied goals as heuristic cost
+    count = 0
 
-		kb = PropKB()
-		kb.tell(decode_state(node.state, self.state_map).pos_sentence())
-		for clause in self.goal:
-				if clause not in kb.clauses:
-						count += 1
-
-		return count
+    kb = PropKB()
+    kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+    for clause in self.goal:
+        if clause not in kb.clauses:
+            count += 1
+	    
+    return count
 ```
 
 ### Planning Graph Level-Sum Heuristic
@@ -360,23 +378,23 @@ def h_ignore_preconditions(self, node: Node):
 Level-sum heuristic from planning graph is implemented in <a href="my_planning_graph.py">my_planning_graph.py</a>
 ```python
 def h_levelsum(self):
-		"""The sum of the level costs of the individual goals (admissible if goals independent)
+    """The sum of the level costs of the individual goals (admissible if goals independent)
 
-		:return: int
-		"""
-		level_sum = 0
+    :return: int
+    """
+    level_sum = 0
+    
+    # for each goal in the problem, determine the level cost, then add them together
+    for goal in self.problem.goal:
+        # identify the shallowest level containing current goal state:
+        for level, state_level in enumerate(self.s_levels):
+            # extract state fingerprints:
+            states = set(state.symbol for state in state_level if state.is_pos)
+            if goal in states:
+                level_sum += level
+                break
 
-		# for each goal in the problem, determine the level cost, then add them together
-		for goal in self.problem.goal:
-				# identify the shallowest level containing current goal state:
-				for level, state_level in enumerate(self.s_levels):
-						# extract state fingerprints:
-						states = set(state.symbol for state in state_level if state.is_pos)
-						if goal in states:
-								level_sum += level
-								break
-
-		return level_sum
+    return level_sum
 ```
 
 ## Performance Comparison
@@ -412,3 +430,5 @@ The following three automated heuristics for a-star search are evaluated and the
 |    1    |      A* with h_pg_levelsum     |    True    |    0.5447    |        11       |     13     |     50    |
 |    2    |      A* with h_pg_levelsum     |    True    |    57.2826   |       238       |     240    |    1911   |
 |    3    |      A* with h_pg_levelsum     |    True    |   241.8140   |       325       |     327    |    3002   |
+
+### KPI Analysis
