@@ -40,10 +40,10 @@ Action(
 - Problem 1 initial state and goal:
 ```
 Init(
-    At(C1, SFO) ∧ At(C2, JFK) ∧ 
-    At(P1, SFO) ∧ At(P2, JFK) ∧ 
-    Cargo(C1) ∧ Cargo(C2) ∧ 
-    Plane(P1) ∧ Plane(P2) ∧ 
+    At(C1, SFO) ∧ At(C2, JFK) ∧
+    At(P1, SFO) ∧ At(P2, JFK) ∧
+    Cargo(C1) ∧ Cargo(C2) ∧
+    Plane(P1) ∧ Plane(P2) ∧
     Airport(JFK) ∧ Airport(SFO)
 )
 Goal(
@@ -53,10 +53,10 @@ Goal(
 - Problem 2 initial state and goal:
 ```
 Init(
-    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ 
-    At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) ∧ 
-    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ 
-    Plane(P1) ∧ Plane(P2) ∧ Plane(P3) ∧ 
+    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧
+    At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) ∧
+    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧
+    Plane(P1) ∧ Plane(P2) ∧ Plane(P3) ∧
     Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL)
 )
 Goal(
@@ -66,10 +66,10 @@ Goal(
 - Problem 3 initial state and goal:
 ```
 Init(
-    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) ∧ 
-    At(P1, SFO) ∧ At(P2, JFK) ∧ 
-    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4) ∧ 
-    Plane(P1) ∧ Plane(P2) ∧ 
+    At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) ∧
+    At(P1, SFO) ∧ At(P2, JFK) ∧
+    Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4) ∧
+    Plane(P1) ∧ Plane(P2) ∧
     Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD)
 )
 Goal(
@@ -372,7 +372,7 @@ def h_ignore_preconditions(self, node: Node):
     for clause in self.goal:
         if clause not in kb.clauses:
             count += 1
-	    
+
     return count
 ```
 
@@ -386,7 +386,7 @@ def h_levelsum(self):
     :return: int
     """
     level_sum = 0
-    
+
     # for each goal in the problem, determine the level cost, then add them together
     for goal in self.problem.goal:
         # identify the shallowest level containing current goal state:
@@ -435,3 +435,19 @@ The following three automated heuristics for a-star search are evaluated and the
 |    3    |      A* with h_pg_levelsum     |    True    |   241.8140   |       325       |     327    |    3002   |
 
 ### KPI Analysis
+
+From the above performance summary, the A* search with h_ignore_preconditions heuristic appears to be the best planning algorithm for air cargo planning. The reasons are as follows.
+
+
+1. The algorithm is optimal.
+2. Among all optimal algorithms, it has the second least node expansions, that is, the second least resource constraints on target system.
+3. Among all optimal algorithms, it has the fastest running time and scales well as the problem complexity goes up.
+
+
+Compared with uninformed algorithms, namely BFS, UFS and A* with trivial heuristic, the best one has far less node expansions due to the knowledge induced by informative heuristic. Since less node expansions means less resource constraints on target system, the best algorithm is on the one hand resource friendly.
+
+
+On the other hand, although the A* with h_pg_levelsum has the least number of node expansions, it suffers from significant runtime overhead incurred by the dynamic construction of planning graph. It makes the algorithm not scalable as the problem complexity goes up.
+
+
+To sum up, the A* search with h_ignore_preconditions heuristic is the best planning algorithm for air cargo planning.
